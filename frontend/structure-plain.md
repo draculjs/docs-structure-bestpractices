@@ -51,7 +51,8 @@
 |  |  |  |  |  |  | SomeChildComponent.story.js
 |  |  |  +--providers
 |  |  |  |  |  ProviderOne.js
-|  |  |  |  |  ProviderTwo.js 
+|  |  |  |  |  ProviderTwo.js
+|  |  |  |  +--gql
 |  |  |  +--routes/index.js
 |  |  |  +--store/index.js
 |  +----plugins/vuetify.js

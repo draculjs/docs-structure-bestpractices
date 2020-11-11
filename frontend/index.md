@@ -5,11 +5,19 @@ Se describe el stack tecnologico, estructura, convenciones y buenas practicas
 - Vuex
 - Vuetify
 - VueI18n
-- Graphql => ApolloClient
+- ApolloCliente (Graphql) 
+- Axios (APIs)
 - Jest (Testing)
 
 ## Estructura Modular
 Se propone una estructura modular que permita separar nuestro codigo en varias agrupaciones (modulos).
+Los modulos pueden ser dependientes entre si, pero se sugiere evitar dependencia bidireccional.
+
+Modulos de Ejemplo:
+- **common**: Componentes y funciones comunes
+- **user**: Gestion y funciones de usuarios (Login, Logout, Profile, ABM)
+- **notifications**: Provee componentes y funciones para notificaciones de usuarios
+- **campaign**: Agrupa los componentes y funcionalidades de campañas
 
 ## Estructura de directorios
 A continuacion se detalla la estructura de directorios propuesta
@@ -67,6 +75,7 @@ A continuacion se detalla la estructura de directorios propuesta
 |  |  |  +--providers   #Servicios de integracion con backend, apis y provedores
 |  |  |  |  |  ProviderOne.js  #Clase/Objeto con operaciones Proveedor 1
 |  |  |  |  |  ProviderTwo.js  #Clase/Objeto con operaciones Proveedor 2
+|  |  |  |  +--gql  #Directorio con archivos .graphql/.gql
 |  |  |  +--routes/index.js    #Rutas del modulo
 |  |  |  +--store/index.js     #Store del modulos
 |  +----plugins/vuetify.js     #Config Vuetify
@@ -74,41 +83,74 @@ A continuacion se detalla la estructura de directorios propuesta
 |  +----store/index.js   #Merge con store de todos los modulos
 ```
 
-- dist: Fuentes para produccion (transpilado, minificado y unificado)
-- public: 
-- src: Codigo fuente crudo
-
+## dist
+Build de la aplicación: Codigo transpilado, minificado, unificado
 
 ## src
+Codigo fuente de la aplicación
 
-### layout
-Contiene el layout utilizado como base al renderizar todas las paginas de la SPA
+## Layout
+Contiene el layout utilizado como base al renderizar todas las paginas de la aplicacion
 
-### components
-Contiene componentes reutilizables a lo largo de todo el proyecto.
-Por cada componente se debe crear una carpeta que puede incluir:
-- Un archivo NombreComponente.vue con el componente en si mismo
-- Un archivo NombreComponente.test.js con el testing del componente
-- Un archivo NombreComponente.story.js si se utiliza StoryBook
-- Un archivo index.js que exporta el componente
+- **RootPath**: src/layout
 
-### pages
-Contiene componentes Vue que presentan una pagina de la SPA, generalmente mapeada con una ruta (routes).
+El layout suele tener los siguientes sub-componentes:
+- AppBar: Barra superior con logo/nombre de la aplicacion, boton para mostrar/ocultar menu, avatar y nombre del usuario
+- SideBar: Menu vertical con acceso a las diferentes paginas de la webapp
+- Footer: Pie de pagina
 
-Por cada pagina se debe crear una carpeta con el siguiente contenido:
+## Rutas
+Contine las rutas declaradas de todas las paginas
+
+- **ModulePath**: src/modules/ModuleName/routes
+- **RootPath**: src/routes
+
+## I18n
+Contiene las traducciones del plugin i18n
+
+- **ModulePath**: src/modules/ModuleName/i18n
+- **RootPath**: src/i18n
+
+## Store
+Contiene los Vuex stores de la aplicacion
+
+- **ModulePath**: src/modules/ModuleName/store
+- **RootPath**: src/store
+
+## Providers 
+Contiene servicios de integración con Backend/APIs.
+Se sugiere usar Axios para request a APIs HTTP y ApolloCliente para operaciones Graphql
+
+- **ModulePath**: src/modules/ModuleName/providers
+- **ModulePathGql**: src/modules/ModuleName/providers/gql
+
+## Componentes
+Contiene componentes reutilizables del modulo
+
+- **ModulePath**: src/modules/ModuleName/components
+
+
+Por cada componente se debe crear un directorio con el nombre del componente en PascalCase y dentro del mismo incluir:
+- Un archivo **NombreComponente.vue** con el componente en si mismo
+- Un archivo **NombreComponente.test.js** con el testing del componente
+- Un archivo **NombreComponente.story.js** si se utiliza StoryBook
+- Un archivo **index.js** que exporta el componente
+
+Para el directorio y componente utilizar "PascalCase". Ejemplo: 
+- Directorio: SomeComponentName
+- Componente: SomeComponentName.vue
+
+
+## Paginas
+Contiene componentes Vue que presentan una pagina de la SPA, las paginas deben ser mapeadas con una ruta (routes) y generalmente se agrega un acceso desde el menu.
+
+- **ModulePath**: src/modules/ModuleName/pages
+
+Por cada pagina se debe crear un directorio con el nombre de la pagina en PascalCase y subfijo "Page" y dentro del mismo incluir
 - Un archivo NombrePagina**Page.vue** con el componente y el subfijo "Page"
 - Un archivo index.js que exporta el componente
 - Sub directorios con componentes que solo utiliza esta pagina, con la misma estructura de componetes explicada en la seccion "componentes"
 
-### routes
-Contine las rutas declaradas de todas las paginas
-
-
-### i18n
-Contiene las traducciones del plugin i18n
-
-### store
-Contiene los Vuex stores de la aplicacion
-
-### providers
-Contiene servicios de integración con Backend/APIs
+Para el directorio y componente utilizar "PascalCase" y agregar subfijo "Page". Ejemplo: 
+- Directorio: SomeNamePage
+- Componente: SomeNamePage.vue

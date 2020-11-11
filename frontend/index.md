@@ -115,7 +115,11 @@ src
 |  |  |  LayoutFooter.vue   #Pie de pagina
 ```
 ## Rutas
-Contine las rutas declaradas de todas las paginas
+Contine las rutas que mapean una URL con un pagina (componente vue) 
+
+Cada modulo puede incluir una coleccion de rutas. Luego en el directorio routes raiz (src/routes) se hace un merge (fusion) de las rutas de todos los modulos.
+
+
 
 ### Rutas Estructura
 
@@ -129,6 +133,20 @@ Contine las rutas declaradas de todas las paginas
 |  |  |  +--routes/index.js    #Rutas del modulo
 |  +----router/index.js  #Merge con rutas de todos los modulos
 ```
+
+### Rutas: Merge example
+Ejemplo para fusionar rutas (src/routes/index.js) usando libreria 'deepmerge'
+```
+import merge from 'deepmerge'
+import commonRoutes from '../modules/common/routes'
+import userRoutes from '../modules/user/routes'
+import campaignRoutes from '../modules/campaign/routes'
+
+const routes = merge.all([commonRoutes, userRoutes, campaignRoutes])
+
+export default routes;
+```
+
 
 ## I18n
 Contiene las traducciones del plugin i18n
@@ -144,6 +162,19 @@ Contiene las traducciones del plugin i18n
 |  +--modules  #Modulos de la plublicacion
 |  |  +--ModuleCe  #Modulo C
 |  |  |  +--i18n/index.js  #Mensajes i18n del modulo C
+```
+
+### I18n: Merge example
+Ejemplo para fusionar I18n (src/I18n/index.js) usando libreria 'deepmerge'
+```
+import merge from 'deepmerge'
+import commonI18n from '../modules/common/i18n'
+import userI18n from '../modules/user/i18n'
+import campaignI18n from '../modules/campaign/i18n'
+
+const i18n = merge.all([commonI18n, userI18n, campaignI18n])
+
+export default i18n; 
 ```
 
 ## Store
@@ -162,6 +193,27 @@ Contiene los Vuex stores de la aplicacion
 |  |  |  +--store/index.js     #Store del modulos
 |  +----store/index.js   #Merge con store de todos los modulos
 ```
+
+### Store: Merge de modulos
+
+```
+import Vue from 'vue'
+import Vuex from 'vuex'
+import commonStore from '../modules/common/store'
+import userStore from '../modules/user/store'
+import campaignStore from '../modules/campaign/store'
+
+Vue.use(Vuex)
+
+export default new Vuex.Store({
+    modules:{
+        common: BaseModuleStore,
+        user: userStore,
+        campaign: campaignStore
+    }
+})
+```
+
 ## Providers 
 Contiene servicios de integración con Backend/APIs.
 Se sugiere usar Axios para request a APIs HTTP y ApolloCliente para operaciones Graphql
